@@ -1,0 +1,6 @@
+data_name b030600b.001
+_raw_data_
+_err_strngncy_ 3
+_error_filter_  10
+280.00 -1.000
+279.00 -2.000

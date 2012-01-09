@@ -1,0 +1,23 @@
+
+
+ FILENAME = r15482m.bp             
+SAMPLE = mb      VERSION =             
+DATE OF SPECTRUM= 
+              
+NOTE:        
+NOTE:        
+
+        LOW LAMBDA (nm)     HIGH LAMBDA (nm)    # OF POINTS         DELTA X
+         160.0               260.0                 501                 0.0
+
+        CONC (mg/ml)        PATHLENGTH (cm)     SCALE (Deg)         MEAN RES MW
+        0.000E+00             0.000                0.000               0.000
+
+        TIME CONST (s)      SCAN SPEED(nm/min)  DETECTOR POSITION   # SCANS
+           0.00                0.00   0.00           08
+
+               DATAPOINTS
+
+  LAMBDA         Y DATA          ST. DEV.           O.D.
+   160.000         -10000.000      0.000          0.000       
+   161.000         -20000.000      0.000          0.000       

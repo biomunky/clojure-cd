@@ -1,13 +1,53 @@
-# CDExperiment
+# cd-experiment
 
-FIXME: write description
+Code for reading various types of circular dichroism experiment output.  Currently reads gen, jasco, aviv, bp and plain text
+(two columns: wavelength, reading).  Can convert data from machine units/yy/mean residue ellipticity to delta epsilon (DE).
+DE are used by the PCDDB and should be used by all.  There is also the option to convert any of the formats to a simple
+gen-like format, including metadata where present.
 
 ## Usage
 
-FIXME: write
+Copy the .jar to your classpath and then add
+(ns your.namespace
+	(:use [cd.parser]
+		  [cd.experiment]))
+
+cd.parser contains the parsing code
+cd.experiment allows for unit conversion and gen creation.
+
+Example:
+Parse a file ->
+
+(parse-experiment <full_path_to_file> <type>)
+<full_path_to_file> would be: /User/you/mydata/some_experiment.gen
+<type>must be one of :gen :plain :jasco :aviv :bp
+
+This returns an Experiment. record containing :meta, :spectrum :wavelength
+
+(def my-exp (parse-experiment "resources/gen.txt" :gen))
+(keys my-exp)
+[:meta :spectrum :wavelengths] -> it's a plain defrecord at the moment.
+
+Convert to a gen file ->
+(def my-aviv (parse-experiment "resources/aviv.txt" :aviv))
+(println (print-gen my-aviv))
+
+--- snip
+Dwell time (s)          2
+Smoothing window        7
+Experiment              Transferrin
+High Wavelength         280
+170.0       9.00761E-02	    9.00761E-02	    9.00761E-02	    0.00000E+00	    0.00000E+00	    0.00000E+00
+171.0      -3.09388E-01	   -3.09388E-01	   -3.09388E-01	    0.00000E+00	    0.00000E+00	    0.00000E+00
+172.0      -6.51957E-01	   -6.51957E-01	   -6.51957E-01	    0.00000E+00	    0.00000E+00	    0.00000E+00
+173.0      -9.37600E-01	   -9.37600E-01	   -9.37600E-01	    0.00000E+00	    0.00000E+00	    0.00000E+00
+--- snip
+
+Gen files often contain raw and processed data.  Files produced by this method will copy your data into
+the raw, processed and HT columns (at a later date HTs will be incorporated where available) 
 
 ## License
 
-Copyright (C) 2012 FIXME
+Copyright (C) 2012 theVillageIdiot
 
 Distributed under the Eclipse Public License, the same as Clojure.

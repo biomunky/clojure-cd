@@ -1,6 +1,0 @@
-(ns CDExperiment.core
-    (:use [CDExperiment.CDParser]))
-
-(defn -main [& args]
-    (println "Hello World")
-    (parse-experiment "foo" 'gen))
