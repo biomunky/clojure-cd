@@ -1,6 +1,15 @@
-(ns cd.experiment)
+(ns cd.experiment
+    (:use [clojure.java.io :only [writer]]))
 
-(defrecord Experiment [meta wavelength spectrum])
+(defrecord Experiment [metadata wavelength spectrum ht baseline calibration])
+
+(defn experiment-record 
+  "Creates an Experiment record - checks first to make sure the 
+  wavelengh/spectrum data runs from low to high"
+  [meta wavelength spectrum ht base cali]
+  (if (> (first wavelength) (second wavelength) )
+    (Experiment. meta (reverse wavelength) (reverse spectrum) (reverse ht) (reverse base) (reverse cali))
+    (Experiment. meta wavelength spectrum ht base cali)))
 
 (defn mre-to-de [x] (/ x 3298.0))
 
@@ -39,7 +48,14 @@ mg/ml and mean residue weight"
   [experiment]
   (let [s (:spectrum experiment) w (:wavelength experiment)]
     (apply str (interpose "\n"
-			  (map #(format "%1.1f      % 2.5E	   % 2.5E	   % 2.5E	    0.00000E+00	    0.00000E+00	    0.00000E+00" %1 %2 %2 %2) w s)))))
+			  (map #(format "%1.1f	   % 2.5E	   % 2.5E	   % 2.5E	    0.00000E+00	    0.00000E+00	    0.00000E+00" %1 %2 %2 %2) w s)))))
 
 (defn print-gen [experiment]
   (apply str (interpose "\n" [(meta-string experiment) (data-string experiment)])))
+
+(defn write-gen [experiment outputfile]
+    (let [g (print-gen experiment)]
+        (try
+            (with-open [wtr (writer outputfile)]
+            (.write wtr g))
+            (catch Exception e (throw e)))))

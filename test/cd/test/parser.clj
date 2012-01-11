@@ -2,11 +2,11 @@
   (:require cd.experiment)
   (:import [cd.experiment Experiment])
   (:use [clojure.test]
-        [cd.parser]))
+        [cd.parser]
+        [cd.experiment]))
 
-(def my-test (Experiment. {"key1" "val1", "key2" "val2"}
-                      [1, 2, 3, 4]
-                      [5, 6, 7, 8]))
+; an experiment comprises =>
+; wavelength, spectrum, ht, baseline, calibration
 
 (def my-meta-a "Key     Value")
 (def my-meta-b "Key Value")
@@ -14,18 +14,6 @@
 
 (def test-keys "a  b  c  d  e")
 (def test-values "1  2  3  4  5")
-
-(deftest test-experiment-record
-    (is (= (:meta my-test) {"key1" "val1", "key2" "val2"}))
-    (is (= (:wavelength my-test) [1 2 3 4]))
-    (is (= (:spectrum my-test) [5 6 7 8])))
-
-(deftest test-experiment-record-reorder
-    (def tset-ym (experiment-record 
-                    {"key1" "val1", "key2" "val2"}
-                    (reverse [1, 2, 3, 4])
-                    (reverse [5, 6, 7, 8])))
-    (is (= my-test tset-ym)))
 
 (deftest test-extract-xy
     (is (= (-extract-xy "123\t123.0" 1)      [123.0, 123.0] )))
@@ -44,7 +32,7 @@
     (def test-case (experiment-record {"Date" "2008-05-06T00:00:00",
                         "Generic" "a24703.gen",
                         "Experiment" "Transferrin"}
-                        '(279.0 280.0) '(2.0 1.0)))
+                        '(279.0 280.0) '(2.0 1.0) nil nil nil))
     (is (= (:meta real-case) (:meta test-case)))
     (is (= (:wavelength real-case) (:wavelength test-case)))
     (is (= (:spectrum real-case) (:spectrum test-case))))    
@@ -54,7 +42,7 @@
     (def test-case (experiment-record {"ORIGIN" "JASCO", 
                                        "DATA" "TYPE", 
                                        "TITLE" "WT-TTR. Gdn Unfold. 990710"}
-                        '(429.5 430.0) '(-2.0 -1.0)))
+                        '(429.5 430.0) '(-2.0 -1.0) nil nil nil))
     (is (= (:meta real-case) (:meta test-case)))
     (is (= (:wavelength real-case) (:wavelength test-case)))
     (is (= (:spectrum real-case) (:spectrum test-case))))
@@ -64,7 +52,7 @@
     (def test-case (experiment-record {"data_name" "b030600b.001",
                                        "_err_strngncy_" "3",
                                        "_error_filter_"  "10"}
-                        '(279.0 280.0) '(-2.00 -1.00)))
+                        '(279.0 280.0) '(-2.00 -1.00) nil nil nil))
     (is (= (:meta real-case) (:meta test-case)))
     (is (= (:wavelength real-case) (:wavelength test-case)))
     (is (= (:spectrum real-case) (:spectrum test-case))))
@@ -83,7 +71,7 @@
                                        "# SCANS" "08",
                                        "HIGH LAMBDA (nm)" "260.0",
                                        "CONC (mg/ml)" "0.000E+00"} 
-                        '(160.0 161.0) '(-10000.00 -20000.00)))
+                        '(160.0 161.0) '(-10000.00 -20000.00) nil nil nil))
     (is (= (:meta real-case) (:meta test-case)))
     (is (= (:wavelength real-case) (:wavelength test-case)))
     (is (= (:spectrum real-case) (:spectrum test-case))))
@@ -91,7 +79,7 @@
 (deftest read-plain
     (def real-case (parse-experiment "test/cd/resources/plain.txt" :plain))
     (def test-case (experiment-record {}
-                        '(1.0 2.0 3.0) '(1.0 2.0 3.0)))
+                        '(1.0 2.0 3.0) '(1.0 2.0 3.0) nil nil nil))
     (is (= (:meta real-case) (:meta test-case)))
     (is (= (:wavelength real-case) (:wavelength test-case)))
     (is (= (:spectrum real-case) (:spectrum test-case))))    

@@ -9,7 +9,10 @@
     (def s3 (parse-experiment "resources/jasco.txt" :jasco))
     (def s4 (parse-experiment "resources/bp2.txt" :bp))
 
-
-    (println (print-gen s1))
+    (write-gen s1 "/tmp/mygen.txt")
+    
+    (def s5 (parse-experiment "resources/pcd.txt" :pcd))
+    (println (keys s5))
+    (println (:metadata s5))    
     
     (flush))

@@ -1,8 +1,7 @@
 # cd-experiment
 
-Code for reading various types of circular dichroism experiment output.  Currently reads gen, jasco, aviv, bp and plain text
-(two columns: wavelength, reading).  Can convert data from machine units/yy/mean residue ellipticity to delta epsilon (DE).
-DE are used by the PCDDB and should be used by all.  There is also the option to convert any of the formats to a simple
+Code for reading various types of circular dichroism experiment output.  Currently reads gen, jasco, aviv, bp, pcd and plain text
+(two columns: wavelength, reading).  Can convert data from machine units/yy/mean residue ellipticity to delta epsilon (DE).  There is also the option to convert any of the formats to a simple
 gen-like format, including metadata where present.
 
 ## Usage
@@ -22,11 +21,11 @@ Parse a file ->
 <full_path_to_file> would be: /User/you/mydata/some_experiment.gen
 <type>must be one of :gen :plain :jasco :aviv :bp
 
-This returns an Experiment. record containing :meta, :spectrum :wavelength
+This returns an Experiment. record containing :metadata, :spectrum :wavelength :baseline :ht :calibration
 
 (def my-exp (parse-experiment "resources/gen.txt" :gen))
 (keys my-exp)
-[:meta :spectrum :wavelengths] -> it's a plain defrecord at the moment.
+[:meta :spectrum :wavelengths :baseline :ht :calibration] -> it's a plain defrecord at the moment.
 
 Convert to a gen file ->
 (def my-aviv (parse-experiment "resources/aviv.txt" :aviv))
